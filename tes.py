@@ -2,6 +2,28 @@ import socket
 import os
 
 
+# Alamat Server
+HOST = '127.0.0.1'
+
+# Port Server
+PORT = 8241
+
+# base directory folder
+DIRECTORY = os.path.dirname(os.path.abspath(__file__))
+
+# Buat TCP Scoket
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+# bind alamat dan port tertentu
+s.bind((HOST, PORT))
+
+# Tunggu Koneksi masuk
+s.listen()
+
+# Pesan konfirmasi bahwa server telah berjalan
+print(f"Server berjalan di {HOST} port {PORT} (http://{HOST}:{PORT})......")
+
+
 # fungsi untuk membaca isi file dalam bentuk binary
 def read_file(filepath):
     file = open(filepath, 'rb')
@@ -38,27 +60,6 @@ def http_response(file):
         response = http_header.encode('utf-8')
     return response
 
-
-# Alamat Server
-HOST = '127.0.0.1'
-
-# Port Server
-PORT = 8241
-
-# base directory folder
-DIRECTORY = os.path.dirname(os.path.abspath(__file__))
-
-# Buat TCP Scoket
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-# bind alamat dan port tertentu
-s.bind((HOST, PORT))
-
-# Tunggu Koneksi masuk
-s.listen()
-
-# Pesan konfirmasi bahwa server telah berjalan
-print(f"Server berjalan di {HOST} port {PORT} (http://{HOST}:{PORT})......")
 
 while True:
     # Menerima koneksi server
