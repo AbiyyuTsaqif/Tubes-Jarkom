@@ -9,9 +9,9 @@ HOST = '127.0.0.1'
 PORT = 8241
 
 # base directory folder
-DIRECTORY = os.path.dirname(os.path.abspath(__file__))
+DOCUMENT_LOCATION = os.path.dirname(os.path.abspath(__file__))
 
-# Buat TCP Scoket
+# Membuat TCP Scoket
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # bind alamat dan port tertentu
@@ -31,32 +31,30 @@ def read_file(filepath):
     return content
 
 # http response
-
-
 def http_response(file):
-    response = ''  # inisisasi response
+    response = ''  # Inisisasi response
 
-    # mengambil filename dari request dengan metode split
+    # Mengambil filename dari request dengan metode split
     filename = file.split()[1][1:]
 
-    # menentukan filepath dengan menggabungkan base directory dengan filename menggunakan metode join
-    filepath = os.path.join(DIRECTORY, filename)
+    # Menentukan filepath dengan menggabungkan base directory dengan filename menggunakan metode join
+    filepath = os.path.join(DOCUMENT_LOCATION, filename)
 
     if os.path.isfile(filepath):  # pengkondisian jika file ditemukan
         content = read_file(filepath)
-        # buat HTTP header
+        # Membuat HTTP header
         http_header = "HTTP/1.1 200 OK\r\n"
         http_header += f"Content-Length: {len(content)}\r\n"
         http_header += "Content-Type: text/html\r\n"
         http_header += "\r\n"
-        # gabungkan header dengan konten file
+        # Menggabungkan header dengan konten file
         response = http_header.encode('utf-8') + content
     else:  
-        # jika file tidak ada, buat HTTP header dengan status code 404 Not Found
+        # Apabila file tidak ada, buat HTTP header dengan status code 404 Not Found
         http_header = "HTTP/1.1 404 Not Found\r\n"
         http_header += "Content-Length: 0\r\n"
         http_header += "\r\n"
-        # kirimkan response dengan header saja (tanpa konten)
+        # Mengirimkan response dengan header saja (tanpa konten)
         response = http_header.encode('utf-8')
     return response
 
@@ -75,10 +73,11 @@ while True:
     method, path, protocol = file.split('\n')[0].split()
     print("file telah berhasil terbuka")
     print('Method :', method)
-    filepath = os.path.join(DIRECTORY, file.split()[1][1:])
-    print("Directory File .py : ", DIRECTORY)
+    filepath = os.path.join(DOCUMENT_LOCATION, file.split()[1][1:])
+    print("Document Location .py : ", DOCUMENT_LOCATION)
     print('Path :', filepath)
     print('Protocol: ', protocol)
 
     connnectionSocket.sendall(http_respons)  # kirim response ke client
     connnectionSocket.close()  # Menutup koneksi
+
